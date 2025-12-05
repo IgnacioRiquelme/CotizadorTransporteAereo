@@ -1,0 +1,12 @@
+{
+  "LoginData": {
+    "rut": "10.535.160-7",
+    "contraseña": "abc12345",
+    "url": "https://oficinavirtual.bciseguros.cl/"
+  },
+  "ConfiguracionAdicional": {
+    "timeout": "30",
+    "navegador": "chrome",
+    "entorno": "qa"
+  }
+}

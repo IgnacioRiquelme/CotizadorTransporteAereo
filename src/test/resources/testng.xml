@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite de Automatización" verbose="1">
+    <listeners>
+        <listener class-name="base.TestListener"/>
+    </listeners>
+    
+    <test name="Tests de Ejemplo" preserve-order="true">
+        <classes>
+            <class name="tests.EjemploTest"/>
+        </classes>
+    </test>
+</suite>
