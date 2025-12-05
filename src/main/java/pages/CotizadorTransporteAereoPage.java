@@ -37,8 +37,8 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By rdbMonedaUF = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[3]/p/input[1]");
     private By rdbViajeNacional = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[4]/p/input[1]");
     private By dropTipoCarga = By.id("DropTipoCarga_chosen");
-    private By opcionAlimentosMascotas = By.xpath("//span[text()='Alimentos De Mascotas']");
-    private By btnAgregarTipoCarga = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[3]/div[1]/div/a");
+    private By inputBusquedaTipoCarga = By.xpath("//div[@id='DropTipoCarga_chosen']//input[@type='text']");
+    private By btnAgregarTipoCarga = By.id("btnAgregarTipoCarga");
 
     // CONSTRUCTOR
     // ============================================
@@ -269,15 +269,33 @@ public class CotizadorTransporteAereoPage extends BasePage {
     }
 
     /**
-     * Selecciona el tipo de carga Alimentos De Mascotas
+     * Ingresa tipos de carga escribiendo directamente en el campo y presionando ENTER
      */
-    public void seleccionarTipoCargaAlimentosMascotas() {
-        pausaPorElementoLocalizado(dropTipoCarga);
-        click(dropTipoCarga); // Abrir el dropdown chosen
-        pausaFijaSeg(1);
-        pausaPorElementoLocalizado(opcionAlimentosMascotas);
-        click(opcionAlimentosMascotas); // Seleccionar la opción
-        pausaFijaMs(500);
+    public void ingresarTiposCarga() {
+        try {
+            // Hacer clic en el dropdown para abrir el campo de búsqueda
+            pausaPorElementoLocalizado(dropTipoCarga);
+            click(dropTipoCarga);
+            pausaFijaMs(500);
+            
+            // Localizar el campo de búsqueda dentro del dropdown
+            pausaPorElementoVisible(inputBusquedaTipoCarga);
+            WebElement campoBusqueda = driver.findElement(inputBusquedaTipoCarga);
+            
+            // Escribir "Alimentos De Mascotas" y presionar ENTER
+            campoBusqueda.sendKeys("Alimentos De Mascotas");
+            campoBusqueda.sendKeys(Keys.ENTER);
+            pausaFijaMs(500);
+            
+            // Escribir "Electrónica" y presionar ENTER
+            campoBusqueda.sendKeys("Electrónica");
+            campoBusqueda.sendKeys(Keys.ENTER);
+            pausaFijaMs(500);
+            
+            System.out.println("---> Tipos de carga ingresados: Alimentos De Mascotas, Electrónica");
+        } catch (Exception e) {
+            System.out.println("---> ingresarTiposCarga: error -> " + e.getMessage());
+        }
     }
 
     /**
@@ -286,7 +304,8 @@ public class CotizadorTransporteAereoPage extends BasePage {
     public void agregarTipoCarga() {
         pausaPorElementoClickeable(btnAgregarTipoCarga);
         click(btnAgregarTipoCarga);
-        pausaFijaSeg(2);
+        pausaFijaSeg(1);
+        System.out.println("---> Clic en Agregar tipo de carga");
     }
 
     /**

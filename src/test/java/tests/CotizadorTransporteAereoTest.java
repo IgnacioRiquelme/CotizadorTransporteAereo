@@ -153,8 +153,8 @@ public class CotizadorTransporteAereoTest {
         // Capturar pantalla después de seleccionar opciones
         basePage.capturaPantallaCompleta("t011_OpcionesSeleccionadas");
 
-        System.out.println("---> Seleccionamos Tipo de Carga: Alimentos De Mascotas");
-        cotizadorPage.seleccionarTipoCargaAlimentosMascotas();
+        System.out.println("---> Ingresamos tipos de carga: Alimentos De Mascotas y Electrónica");
+        cotizadorPage.ingresarTiposCarga();
 
         System.out.println("---> Agregamos tipo de carga");
         cotizadorPage.agregarTipoCarga();
