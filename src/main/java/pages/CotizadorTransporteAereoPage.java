@@ -22,8 +22,9 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By logoPrincipal = By.xpath("//img[@alt='Logo Oficina Virtual']");
     private By btnMenuDesplegable = By.id("menu-desplegable");
     private By menuCotizadores = By.id("menu-cotizadores");
-    private By btnTransporte = By.xpath("//*[@id=\"set_agrupacion\"]/div[3]/section/a");
-    private By btnTransporteAereo = By.xpath("//*[@id=\"set_agrupacion\"]/div[2]/header/figure/img");
+    private By btnTransporte = By.xpath("//div[contains(text(),'Transporte')]/parent::a");
+    private By submenuTransporte = By.id("transporte_submenu");
+    private By btnTransporteAereo = By.xpath("//div[contains(text(),'Transporte aéreo') or contains(text(),'Transporte Aéreo')]/parent::a");
 
     // CONSTRUCTOR
     // ============================================
@@ -102,7 +103,7 @@ public class CotizadorTransporteAereoPage extends BasePage {
     }
 
     /**
-     * Selecciona Transporte para desplegar el submenu (similar a seleccionarRamosVarios)
+     * Selecciona Transporte en la página de Cotizadores usando JavaScript
      */
     public void seleccionarTransporte() {
         pausaFijaSeg(1);
@@ -112,6 +113,20 @@ public class CotizadorTransporteAereoPage extends BasePage {
             pausaFijaMs(500);
             // Hacer clic en Transporte
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", elemento);
+            pausaFijaSeg(1);
+            
+            // Forzar que el submenu sea visible con JavaScript
+            try {
+                WebElement submenu = driver.findElement(submenuTransporte);
+                ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].style.display = 'block';" +
+                    "arguments[0].style.visibility = 'visible';" +
+                    "arguments[0].style.opacity = '1';" +
+                    "arguments[0].classList.add('active');", submenu);
+            } catch (Exception ex) {
+                System.out.println("---> No se encontró submenu por ID, intentando por script toggleSubmenu");
+                ((JavascriptExecutor) driver).executeScript("toggleSubmenu('transporte_submenu');");
+            }
             pausaFijaSeg(1);
         } catch (Exception e) {
             System.out.println("---> seleccionarTransporte: error -> " + e.getMessage());
@@ -143,27 +158,26 @@ public class CotizadorTransporteAereoPage extends BasePage {
     }
 
     /**
-     * Hace clic en Transporte Aéreo para ingresar usando JavaScript
+     * Ejecuta la función JavaScript para ingresar a Transporte Aéreo
      */
     public void ingresarTransporteAereo() {
         pausaFijaMs(300);
         try {
-            WebElement elemento = driver.findElement(btnTransporteAereo);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", elemento);
-            pausaFijaMs(200);
-            try {
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", elemento);
-            } catch (Exception jsEx) {
-                System.out.println("---> ingresarTransporteAereo: JS click falló -> " + jsEx.getMessage());
-                if (!reintentarClick(btnTransporteAereo)) {
-                    clickComoIcono(btnTransporteAereo);
-                }
-            }
-            pausaFijaSeg(1); // Esperar a que cargue la página
+            // Ejecutar la función JavaScript directamente
+            ((JavascriptExecutor) driver).executeScript("AnalizarCondicionesRol('RedirectHomePost?TPC=8&u=9&cod=0&i=9', false, 'Transporte aéreo')");
+            pausaFijaSeg(3); // Esperar a que cargue la página
         } catch (Exception e) {
-            System.out.println("---> ingresarTransporteAereo: error -> " + e.getMessage());
-            click(btnTransporteAereo);
-            pausaFijaSeg(1);
+            System.out.println("---> ingresarTransporteAereo: error ejecutando JS -> " + e.getMessage());
+            // Fallback: intentar click normal
+            try {
+                WebElement elemento = driver.findElement(btnTransporteAereo);
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", elemento);
+                pausaFijaMs(200);
+                elemento.click();
+                pausaFijaSeg(3);
+            } catch (Exception ex) {
+                System.out.println("---> ingresarTransporteAereo: fallback click también falló -> " + ex.getMessage());
+            }
         }
     }
 

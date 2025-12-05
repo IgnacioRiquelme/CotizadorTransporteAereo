@@ -100,8 +100,13 @@ public class CotizadorTransporteAereoTest {
         System.out.println("---> Ingresamos a Transporte Aéreo");
         cotizadorPage.ingresarTransporteAereo();
 
-        // Pausa de 2 segundos para que cargue completamente la página
-        basePage.pausaFijaSeg(2);
+        // Pausa de 3 segundos para que cargue completamente la página
+        basePage.pausaFijaSeg(3);
+
+        // Verificar que se redirigió correctamente
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("URL después del ingreso: " + currentUrl);
+        Assert.assertTrue(currentUrl.contains("TPC=8") || currentUrl.contains("transporteaereo"), "No se redirigió a la página de Transporte Aéreo");
 
         // Capturar pantalla después de ingresar a Transporte Aéreo
         basePage.capturaPantallaCompleta("t007_TransporteAereo");
