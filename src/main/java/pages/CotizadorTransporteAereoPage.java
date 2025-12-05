@@ -2,9 +2,11 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import base.BasePage;
 
 /**
@@ -25,6 +27,18 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By btnTransporte = By.xpath("//div[contains(text(),'Transporte')]/parent::a");
     private By submenuTransporte = By.id("transporte_submenu");
     private By btnTransporteAereo = By.xpath("//div[contains(text(),'Transporte aéreo') or contains(text(),'Transporte Aéreo')]/parent::a");
+    private By dropCorredor = By.id("DropCorredor");
+    private By dropSucursal = By.id("DropSucursal");
+    private By txtRutContratante = By.id("TbRutcontratante");
+    private By btnSiguiente = By.id("lnkSiguiente");
+
+    // Locators para la página siguiente
+    private By rdbViajeEspecifico = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[2]/div/p/input");
+    private By rdbMonedaUF = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[3]/p/input[1]");
+    private By rdbViajeNacional = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[4]/p/input[1]");
+    private By dropTipoCarga = By.id("DropTipoCarga_chosen");
+    private By opcionAlimentosMascotas = By.xpath("//span[text()='Alimentos De Mascotas']");
+    private By btnAgregarTipoCarga = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[3]/div[1]/div/a");
 
     // CONSTRUCTOR
     // ============================================
@@ -179,6 +193,100 @@ public class CotizadorTransporteAereoPage extends BasePage {
                 System.out.println("---> ingresarTransporteAereo: fallback click también falló -> " + ex.getMessage());
             }
         }
+    }
+
+    /**
+     * Selecciona el corredor en el combobox DropCorredor
+     * @param valor El valor del corredor (ej: "99.147.000-K" para BCI Seguros Generales)
+     */
+    public void seleccionarCorredor(String valor) {
+        pausaPorElementoVisible(dropCorredor);
+        Select select = new Select(driver.findElement(dropCorredor));
+        select.selectByValue(valor);
+        pausaFijaSeg(2); // Esperar a que se carguen otros campos
+    }
+
+    /**
+     * Selecciona la sucursal en el combobox DropSucursal
+     * @param valor El valor de la sucursal (ej: "M" para CASA MATRIZ)
+     */
+    public void seleccionarSucursal(String valor) {
+        pausaPorElementoVisible(dropSucursal);
+        Select select = new Select(driver.findElement(dropSucursal));
+        select.selectByValue(valor);
+        pausaFijaMs(500);
+    }
+
+    /**
+     * Ingresa el RUT del contratante, presiona ENTER y espera a que carguen los datos
+     * @param rut RUT del contratante
+     */
+    public void ingresarRutContratante(String rut) {
+        pausaPorElementoVisible(txtRutContratante);
+        WebElement campoRut = driver.findElement(txtRutContratante);
+        campoRut.clear();
+        campoRut.sendKeys(rut);
+        // Presionar ENTER para que carguen los datos del RUT
+        campoRut.sendKeys(Keys.ENTER);
+        pausaFijaSeg(2); // Esperar máximo 2 segundos a que carguen los datos del RUT
+    }
+
+    /**
+     * Hace clic en el botón Siguiente y espera a que carguen los datos
+     */
+    public void clickSiguiente() {
+        pausaPorElementoClickeable(btnSiguiente);
+        // Usar JavaScript click para asegurar que funcione
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(btnSiguiente));
+        pausaFijaSeg(2); // Esperar a que carguen los datos después del clic
+    }
+
+    /**
+     * Selecciona la opción Viaje Especifico
+     */
+    public void seleccionarViajeEspecifico() {
+        pausaPorElementoLocalizado(rdbViajeEspecifico);
+        click(rdbViajeEspecifico);
+        pausaFijaMs(500);
+    }
+
+    /**
+     * Selecciona la moneda UF
+     */
+    public void seleccionarMonedaUF() {
+        pausaPorElementoLocalizado(rdbMonedaUF);
+        click(rdbMonedaUF);
+        pausaFijaMs(500);
+    }
+
+    /**
+     * Selecciona el tipo de viaje Nacional
+     */
+    public void seleccionarViajeNacional() {
+        pausaPorElementoLocalizado(rdbViajeNacional);
+        click(rdbViajeNacional);
+        pausaFijaMs(500);
+    }
+
+    /**
+     * Selecciona el tipo de carga Alimentos De Mascotas
+     */
+    public void seleccionarTipoCargaAlimentosMascotas() {
+        pausaPorElementoLocalizado(dropTipoCarga);
+        click(dropTipoCarga); // Abrir el dropdown chosen
+        pausaFijaSeg(1);
+        pausaPorElementoLocalizado(opcionAlimentosMascotas);
+        click(opcionAlimentosMascotas); // Seleccionar la opción
+        pausaFijaMs(500);
+    }
+
+    /**
+     * Hace clic en el botón Agregar tipo de carga
+     */
+    public void agregarTipoCarga() {
+        pausaPorElementoClickeable(btnAgregarTipoCarga);
+        click(btnAgregarTipoCarga);
+        pausaFijaSeg(2);
     }
 
     /**

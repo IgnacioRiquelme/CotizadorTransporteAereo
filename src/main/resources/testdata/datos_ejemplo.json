@@ -4,6 +4,9 @@
     "contraseña": "abc12345",
     "url": "https://oficinavirtual.bciseguros.cl/"
   },
+  "CotizacionData": {
+    "rutContratante": "127818894"
+  },
   "ConfiguracionAdicional": {
     "timeout": "30",
     "navegador": "chrome",

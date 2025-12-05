@@ -40,6 +40,7 @@ public class CotizadorTransporteAereoTest {
         // Obtener credenciales del JSON
         String rut = basePage.obtenerJson("datos_ejemplo", "LoginData", "rut");
         String password = basePage.obtenerJson("datos_ejemplo", "LoginData", "contraseña");
+        String rutContratante = basePage.obtenerJson("datos_ejemplo", "CotizacionData", "rutContratante");
 
         // Realizar login
         System.out.println("---> Ingresamos las credenciales");
@@ -110,6 +111,56 @@ public class CotizadorTransporteAereoTest {
 
         // Capturar pantalla después de ingresar a Transporte Aéreo
         basePage.capturaPantallaCompleta("t007_TransporteAereo");
+
+        // Seleccionar corredor BCI Seguros Generales
+        System.out.println("---> Seleccionamos corredor BCI Seguros Generales");
+        cotizadorPage.seleccionarCorredor("99.147.000-K");
+
+        // Capturar pantalla después de seleccionar corredor
+        basePage.capturaPantallaCompleta("t008_CorredorSeleccionado");
+
+        // Seleccionar sucursal CASA MATRIZ
+        System.out.println("---> Seleccionamos sucursal CASA MATRIZ");
+        cotizadorPage.seleccionarSucursal("M");
+
+        // Capturar pantalla después de seleccionar sucursal
+        basePage.capturaPantallaCompleta("t009_SucursalSeleccionada");
+
+        // Ingresar RUT del contratante
+        System.out.println("---> Ingresamos RUT del contratante: " + rutContratante);
+        cotizadorPage.ingresarRutContratante(rutContratante);
+
+        // Hacer clic en Siguiente y esperar carga de datos
+        System.out.println("---> Damos clic en Siguiente y esperamos carga de datos");
+        cotizadorPage.clickSiguiente();
+
+        // Capturar pantalla después de clic en Siguiente
+        basePage.capturaPantallaCompleta("t010_Siguiente");
+
+        // Capturar pantalla antes de seleccionar opciones
+        basePage.capturaPantallaCompleta("t010b_AntesOpciones");
+
+        // Seleccionar opciones en la nueva página
+        System.out.println("---> Seleccionamos Viaje Especifico");
+        cotizadorPage.seleccionarViajeEspecifico();
+
+        System.out.println("---> Seleccionamos Moneda UF");
+        cotizadorPage.seleccionarMonedaUF();
+
+        System.out.println("---> Seleccionamos Tipo de Viaje Nacional");
+        cotizadorPage.seleccionarViajeNacional();
+
+        // Capturar pantalla después de seleccionar opciones
+        basePage.capturaPantallaCompleta("t011_OpcionesSeleccionadas");
+
+        System.out.println("---> Seleccionamos Tipo de Carga: Alimentos De Mascotas");
+        cotizadorPage.seleccionarTipoCargaAlimentosMascotas();
+
+        System.out.println("---> Agregamos tipo de carga");
+        cotizadorPage.agregarTipoCarga();
+
+        // Capturar pantalla después de agregar tipo de carga
+        basePage.capturaPantallaCompleta("t012_TipoCargaAgregado");
 
         System.out.println("---> Finaliza Test\n");
     }
