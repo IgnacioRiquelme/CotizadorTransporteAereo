@@ -162,6 +162,26 @@ public class CotizadorTransporteAereoTest {
         // Capturar pantalla después de agregar tipo de carga
         basePage.capturaPantallaCompleta("t012_TipoCargaAgregado");
 
+        // Seleccionar y agregar primer embalaje: CAJAS DE MADERA
+        System.out.println("---> Seleccionamos embalaje: CAJAS DE MADERA");
+        cotizadorPage.seleccionarEmbalaje("CAJAS DE MADERA");
+        
+        System.out.println("---> Agregamos embalaje: CAJAS DE MADERA");
+        cotizadorPage.agregarEmbalaje();
+
+        // Capturar pantalla después de agregar primer embalaje
+        basePage.capturaPantallaCompleta("t013_EmbalajeCAJASAgregado");
+
+        // Seleccionar y agregar segundo embalaje: BOLSAS
+        System.out.println("---> Seleccionamos embalaje: BOLSAS");
+        cotizadorPage.seleccionarEmbalaje("BOLSAS");
+        
+        System.out.println("---> Agregamos embalaje: BOLSAS");
+        cotizadorPage.agregarEmbalaje();
+
+        // Capturar pantalla después de agregar segundo embalaje
+        basePage.capturaPantallaCompleta("t014_EmbalajeBOLSASAgregado");
+
         System.out.println("---> Finaliza Test\n");
     }
 

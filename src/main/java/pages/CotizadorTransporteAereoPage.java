@@ -39,6 +39,8 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By dropTipoCarga = By.id("DropTipoCarga_chosen");
     private By inputBusquedaTipoCarga = By.xpath("//div[@id='DropTipoCarga_chosen']//input[@type='text']");
     private By btnAgregarTipoCarga = By.id("btnAgregarTipoCarga");
+    private By selectEmbalaje = By.id("DropEmbalaje");
+    private By btnAgregarEmbalaje = By.id("btnAgregarEmbalaje");
 
     // CONSTRUCTOR
     // ============================================
@@ -200,10 +202,10 @@ public class CotizadorTransporteAereoPage extends BasePage {
      * @param valor El valor del corredor (ej: "99.147.000-K" para BCI Seguros Generales)
      */
     public void seleccionarCorredor(String valor) {
-        pausaPorElementoVisible(dropCorredor);
+        pausaPorElementoLocalizado(dropCorredor); // Más rápido: solo espera que esté presente en DOM
         Select select = new Select(driver.findElement(dropCorredor));
         select.selectByValue(valor);
-        pausaFijaSeg(2); // Esperar a que se carguen otros campos
+        pausaFijaSeg(1); // Esperar a que se carguen las sucursales del corredor seleccionado
     }
 
     /**
@@ -211,10 +213,10 @@ public class CotizadorTransporteAereoPage extends BasePage {
      * @param valor El valor de la sucursal (ej: "M" para CASA MATRIZ)
      */
     public void seleccionarSucursal(String valor) {
-        pausaPorElementoVisible(dropSucursal);
+        pausaPorElementoLocalizado(dropSucursal); // Más rápido: solo espera que esté presente en DOM
         Select select = new Select(driver.findElement(dropSucursal));
         select.selectByValue(valor);
-        pausaFijaMs(500);
+        pausaFijaMs(300);
     }
 
     /**
@@ -306,6 +308,45 @@ public class CotizadorTransporteAereoPage extends BasePage {
         click(btnAgregarTipoCarga);
         pausaFijaSeg(1);
         System.out.println("---> Clic en Agregar tipo de carga");
+    }
+
+    /**
+     * Selecciona un embalaje del combobox por texto visible
+     * @param textoEmbalaje Texto visible del embalaje (ej: "CAJAS DE MADERA", "BOLSAS")
+     */
+    public void seleccionarEmbalaje(String textoEmbalaje) {
+        try {
+            pausaPorElementoVisible(selectEmbalaje);
+            WebElement selectElement = driver.findElement(selectEmbalaje);
+            // Hacer scroll al elemento
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", selectElement);
+            pausaFijaMs(300);
+            Select select = new Select(selectElement);
+            select.selectByVisibleText(textoEmbalaje);
+            pausaFijaSeg(1); // Esperar a que se procese la selección
+            System.out.println("---> Embalaje seleccionado: " + textoEmbalaje);
+        } catch (Exception e) {
+            System.out.println("---> seleccionarEmbalaje: error al seleccionar '" + textoEmbalaje + "' -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Hace clic en el botón Agregar embalaje usando JavaScript
+     */
+    public void agregarEmbalaje() {
+        try {
+            pausaPorElementoClickeable(btnAgregarEmbalaje);
+            WebElement botonAgregar = driver.findElement(btnAgregarEmbalaje);
+            // Hacer scroll al elemento
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", botonAgregar);
+            pausaFijaMs(500);
+            // Usar JavaScript click para asegurar que funcione
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", botonAgregar);
+            pausaFijaSeg(2);
+            System.out.println("---> Clic en Agregar embalaje");
+        } catch (Exception e) {
+            System.out.println("---> agregarEmbalaje: error -> " + e.getMessage());
+        }
     }
 
     /**
