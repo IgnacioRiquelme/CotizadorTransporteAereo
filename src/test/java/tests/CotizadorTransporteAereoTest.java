@@ -19,6 +19,7 @@ public class CotizadorTransporteAereoTest {
     private WebDriver driver;
     private BasePage basePage;
     private CotizadorTransporteAereoPage cotizadorPage;
+    public com.aventstack.extentreports.ExtentTest extentTest;
 
     @BeforeMethod
     public void setUp() {
@@ -34,8 +35,9 @@ public class CotizadorTransporteAereoTest {
 
     @Test(description = "Navegación completa al Cotizador de Transporte Aéreo")
     public void testNavegacionCotizadorTransporteAereo() {
+        extentTest = base.TestListener.getExtentTest();
         // Navegar al sitio
-        System.out.println("\n---> Ingresamos a la página: https://oficinavirtual.bciseguros.cl/");
+        base.Log.info("---> Ingresamos a la página: https://oficinavirtual.bciseguros.cl/");
         cotizadorPage.navegarAlSitio();
 
         // Obtener credenciales del JSON
@@ -44,28 +46,30 @@ public class CotizadorTransporteAereoTest {
         String rutContratante = basePage.obtenerJson("datos_ejemplo", "CotizacionData", "rutContratante");
 
         // Realizar login
-        System.out.println("---> Ingresamos las credenciales");
+        base.Log.info("---> Ingresamos las credenciales");
         // Llenar credenciales sin enviar para tomar evidencia
         cotizadorPage.ingresarCredencialesSinEnviar(rut, password);
         // Pequeña espera para que los campos queden visibles en la captura
         basePage.pausaFijaSeg(2);
         // Captura completa con barra de Windows antes de enviar el login
         basePage.capturaPantallaCompleta("t001_Login");
+        extentTest.addScreenCaptureFromPath("../capturas/t001_Login.png");
         // Enviar login
         cotizadorPage.enviarLogin();
 
         // Verificar que se logueó
         Assert.assertTrue(cotizadorPage.isPaginaCargada(), "La página no se cargó después del login");
-        System.out.println("---> Menú Inicio");
+        base.Log.info("---> Menú Inicio");
 
         // Pausa de 2 segundos para que cargue completamente la página de inicio
         basePage.pausaFijaSeg(2);
 
         // Capturar pantalla de la página de inicio antes de desplegar el menú
         basePage.capturaPantallaCompleta("t002_Inicio");
+        extentTest.addScreenCaptureFromPath("../capturas/t002_Inicio.png");
 
         // Desplegar el menú lateral
-        System.out.println("---> Ingresamos al Menú lateral");
+        base.Log.info("---> Ingresamos al Menú lateral");
         cotizadorPage.desplegarMenuLateral();
 
         // Pausa de 1 segundo para que se despliegue el menú
@@ -73,27 +77,29 @@ public class CotizadorTransporteAereoTest {
 
         // Capturar pantalla completa del sistema con el menú desplegado y Cotizadores visible (ANTES del click)
         basePage.capturaPantallaCompleta("t003_MenuLateral");
+        extentTest.addScreenCaptureFromPath("../capturas/t003_MenuLateral.png");
 
         // Seleccionar Cotizadores
-        System.out.println("---> Seleccionamos Cotizadores");
+        base.Log.info("---> Seleccionamos Cotizadores");
         cotizadorPage.seleccionarCotizadores();
 
         // Pausa para que cargue la página de cotizadores
         basePage.pausaFijaSeg(3);
 
         // Seleccionar Transporte para desplegar submenu
-        System.out.println("---> Seleccionamos Transporte");
+        base.Log.info("---> Seleccionamos Transporte");
         cotizadorPage.seleccionarTransporte();
 
         // Aplicar hover sobre Transporte Aéreo
-        System.out.println("---> Aplicamos hover sobre Transporte Aéreo");
+        base.Log.info("---> Aplicamos hover sobre Transporte Aéreo");
         cotizadorPage.hoverTransporteAereo();
 
         // Capturar pantalla con Transporte Aéreo en hover (renombrada a t004_TransporteAereo)
         basePage.capturaPantallaCompleta("t004_TransporteAereo");
+        extentTest.addScreenCaptureFromPath("../capturas/t004_TransporteAereo.png");
 
         // Hacer clic en Transporte Aéreo para ingresar
-        System.out.println("---> Ingresamos a Transporte Aéreo");
+        base.Log.info("---> Ingresamos a Transporte Aéreo");
         cotizadorPage.ingresarTransporteAereo();
 
         // Pausa de 3 segundos para que cargue completamente la página
@@ -101,61 +107,62 @@ public class CotizadorTransporteAereoTest {
 
         // Verificar que se redirigió correctamente
         String currentUrl = driver.getCurrentUrl();
-        System.out.println("URL después del ingreso: " + currentUrl);
+        base.Log.info("URL después del ingreso: " + currentUrl);
         Assert.assertTrue(currentUrl.contains("TPC=8") || currentUrl.contains("transporteaereo"), "No se redirigió a la página de Transporte Aéreo");
 
         // Seleccionar corredor BCI Seguros Generales
-        System.out.println("---> Seleccionamos corredor BCI Seguros Generales");
+        base.Log.info("---> Seleccionamos corredor BCI Seguros Generales");
         cotizadorPage.seleccionarCorredor("99.147.000-K");
 
         // Seleccionar sucursal CASA MATRIZ
-        System.out.println("---> Seleccionamos sucursal CASA MATRIZ");
+        base.Log.info("---> Seleccionamos sucursal CASA MATRIZ");
         cotizadorPage.seleccionarSucursal("M");
 
         // Ingresar RUT del contratante
-        System.out.println("---> Ingresamos RUT del contratante: " + rutContratante);
+        base.Log.info("---> Ingresamos RUT del contratante: " + rutContratante);
         cotizadorPage.ingresarRutContratante(rutContratante);
 
         // Capturar pantalla ANTES de hacer clic en Siguiente (renombrada a t005_Datos)
         basePage.capturaPantallaCompleta("t005_Datos");
+        extentTest.addScreenCaptureFromPath("../capturas/t005_Datos.png");
 
         // Hacer clic en Siguiente y esperar carga de datos
-        System.out.println("---> Damos clic en Siguiente y esperamos carga de datos");
+        base.Log.info("---> Damos clic en Siguiente y esperamos carga de datos");
         cotizadorPage.clickSiguiente();
 
         // Seleccionar opciones en la nueva página
-        System.out.println("---> Seleccionamos Viaje Especifico");
+        base.Log.info("---> Seleccionamos Viaje Especifico");
         cotizadorPage.seleccionarViajeEspecifico();
 
         // Aplicar zoom out al 67% después de seleccionar Viaje Específico
         ((JavascriptExecutor) driver).executeScript("document.body.style.zoom = '0.67'");
         basePage.pausaFijaMs(500);
-        System.out.println("---> Zoom out aplicado al 67%");
+        base.Log.info("---> Zoom out aplicado al 67%");
 
-        System.out.println("---> Seleccionamos Moneda UF");
+        base.Log.info("---> Seleccionamos Moneda UF");
         cotizadorPage.seleccionarMonedaUF();
 
-        System.out.println("---> Seleccionamos Tipo de Viaje Nacional");
+        base.Log.info("---> Seleccionamos Tipo de Viaje Nacional");
         cotizadorPage.seleccionarViajeNacional();
 
-        System.out.println("---> Ingresamos tipos de carga: Alimentos De Mascotas y Electrónica");
+        base.Log.info("---> Ingresamos tipos de carga: Alimentos De Mascotas y Electrónica");
         cotizadorPage.ingresarTiposCarga();
 
-        System.out.println("---> Agregamos tipo de carga");
+        base.Log.info("---> Agregamos tipo de carga");
         cotizadorPage.agregarTipoCarga();
 
         // Seleccionar y agregar primer embalaje: CAJAS DE MADERA
-        System.out.println("---> Seleccionamos embalaje: CAJAS DE MADERA");
+        base.Log.info("---> Seleccionamos embalaje: CAJAS DE MADERA");
         cotizadorPage.seleccionarEmbalaje("CAJAS DE MADERA");
-        
-        System.out.println("---> Agregamos embalaje: CAJAS DE MADERA");
+
+        base.Log.info("---> Agregamos embalaje: CAJAS DE MADERA");
         cotizadorPage.agregarEmbalaje();
 
         // Seleccionar y agregar segundo embalaje: BOLSAS
-        System.out.println("---> Seleccionamos embalaje: BOLSAS");
+        base.Log.info("---> Seleccionamos embalaje: BOLSAS");
         cotizadorPage.seleccionarEmbalaje("BOLSAS");
-        
-        System.out.println("---> Agregamos embalaje: BOLSAS");
+
+        base.Log.info("---> Agregamos embalaje: BOLSAS");
         cotizadorPage.agregarEmbalaje();
 
         // Obtener datos del viaje del JSON
@@ -167,49 +174,52 @@ public class CotizadorTransporteAereoTest {
         String numeroReferencia = basePage.obtenerJson("datos_ejemplo", "ViajeData", "numeroReferencia");
 
         // Seleccionar línea aérea
-        System.out.println("---> Seleccionamos línea aérea: " + lineaAerea);
+        base.Log.info("---> Seleccionamos línea aérea: " + lineaAerea);
         cotizadorPage.seleccionarLineaAerea(lineaAerea);
 
         // Llenar datos del viaje
-        System.out.println("---> Seleccionamos ciudad origen: " + ciudadOrigen);
+        base.Log.info("---> Seleccionamos ciudad origen: " + ciudadOrigen);
         cotizadorPage.seleccionarCiudadOrigen(ciudadOrigen);
 
-        System.out.println("---> Seleccionamos ciudad destino: " + ciudadDestino);
+        base.Log.info("---> Seleccionamos ciudad destino: " + ciudadDestino);
         cotizadorPage.seleccionarCiudadDestino(ciudadDestino);
 
-        System.out.println("---> Ingresamos monto asegurado: " + montoAsegurado);
+        base.Log.info("---> Ingresamos monto asegurado: " + montoAsegurado);
         cotizadorPage.ingresarMontoAsegurado(montoAsegurado);
 
-        System.out.println("---> Ingresamos números de factura/guía: " + numeroFactura);
+        base.Log.info("---> Ingresamos números de factura/guía: " + numeroFactura);
         cotizadorPage.ingresarNumerosFactura(numeroFactura);
 
-        System.out.println("---> Ingresamos números de referencia: " + numeroReferencia);
+        base.Log.info("---> Ingresamos números de referencia: " + numeroReferencia);
         cotizadorPage.ingresarNumerosReferencia(numeroReferencia);
 
-        System.out.println("---> Marcamos las declaraciones requeridas");
+        base.Log.info("---> Marcamos las declaraciones requeridas");
         cotizadorPage.marcarDeclaraciones();
 
         // Capturar pantalla antes de hacer clic en Siguiente (renombrada a t006_Items)
         basePage.capturaPantallaCompleta("t006_Items");
+        extentTest.addScreenCaptureFromPath("../capturas/t006_Items.png");
 
-        System.out.println("---> Clic en Siguiente del viaje");
+        base.Log.info("---> Clic en Siguiente del viaje");
         cotizadorPage.clickSiguienteViaje();
 
         // Restaurar zoom a 100% después del botón Siguiente
         ((JavascriptExecutor) driver).executeScript("document.body.style.zoom = '1.0'");
         basePage.pausaFijaMs(500);
-        System.out.println("---> Zoom restaurado a 100%");
+        base.Log.info("---> Zoom restaurado a 100%");
 
         // Capturar pantalla después de hacer clic en Siguiente (renombrada a t007_Cotizar)
         basePage.capturaPantallaCompleta("t007_Cotizar");
+        extentTest.addScreenCaptureFromPath("../capturas/t007_Cotizar.png");
 
-        System.out.println("---> Clic en Siguiente final (lnkSiguienteSus)");
+        base.Log.info("---> Clic en Siguiente final (lnkSiguienteSus)");
         cotizadorPage.clickSiguienteSus();
 
         // Captura final (tarificación) cuando cargue la página de tarificación y se finalice el test (renombrada a t008_Tarificacion)
         basePage.capturaPantalla("t008_Tarificacion");
+        extentTest.addScreenCaptureFromPath("../capturas/t008_Tarificacion.jpg");
 
-        System.out.println("---> Finaliza Test\n");
+        base.Log.info("---> Finaliza Test\n");
     }
 
     @AfterMethod
@@ -217,7 +227,7 @@ public class CotizadorTransporteAereoTest {
         // Control opcional para mantener el navegador abierto durante depuración
         String keepOpen = System.getenv("KEEP_BROWSER_OPEN");
         if (keepOpen != null && keepOpen.equalsIgnoreCase("true")) {
-            System.out.println("KEEP_BROWSER_OPEN=true -> se mantiene el navegador abierto para depuración");
+            extentTest.info("KEEP_BROWSER_OPEN=true -> se mantiene el navegador abierto para depuración");
             return;
         }
 

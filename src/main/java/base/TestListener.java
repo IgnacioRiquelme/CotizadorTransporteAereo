@@ -27,6 +27,10 @@ public class TestListener implements ITestListener {
     private static ExtentReports extent = ExtentReportManager.getInstance();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
+    public static ExtentTest getExtentTest() {
+        return test.get();
+    }
+
     @Override
     public void onStart(ITestContext context) {
         // Se ejecuta una vez por cada clase de prueba
@@ -37,11 +41,21 @@ public class TestListener implements ITestListener {
         ExtentTest extentTest = extent.createTest(result.getMethod().getMethodName(),
                 result.getMethod().getDescription());
         test.set(extentTest);
+
+        // Set extentTest in test instance using reflection
+        try {
+            Object testInstance = result.getInstance();
+            java.lang.reflect.Field field = testInstance.getClass().getDeclaredField("extentTest");
+            field.setAccessible(true);
+            field.set(testInstance, extentTest);
+        } catch (Exception e) {
+            // Ignore if field not found or not accessible
+        }
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.get().pass(MarkupHelper.createLabel("Test aprobado", ExtentColor.GREEN));
+        test.get().pass(MarkupHelper.createLabel("Test completado exitosamente", ExtentColor.GREEN));
     }
 
     @Override

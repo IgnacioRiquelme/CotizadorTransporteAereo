@@ -616,4 +616,16 @@ public class BasePage {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
+
+    /**
+     * Limpia caracteres no deseados en mensajes de log para evitar '?' u otros símbolos.
+     */
+    public static String limpiarMensaje(String msg) {
+        if (msg == null) return "";
+        try {
+            return msg.replaceAll("[?✓✗]", "");
+        } catch (Exception e) {
+            return msg;
+        }
+    }
 }
