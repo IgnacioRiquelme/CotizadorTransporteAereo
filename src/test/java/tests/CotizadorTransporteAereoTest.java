@@ -1,5 +1,6 @@
 package tests;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -144,6 +145,11 @@ public class CotizadorTransporteAereoTest {
         System.out.println("---> Seleccionamos Viaje Especifico");
         cotizadorPage.seleccionarViajeEspecifico();
 
+        // Aplicar zoom out al 67% después de seleccionar Viaje Específico
+        ((JavascriptExecutor) driver).executeScript("document.body.style.zoom = '0.67'");
+        basePage.pausaFijaMs(500);
+        System.out.println("---> Zoom out aplicado al 67%");
+
         System.out.println("---> Seleccionamos Moneda UF");
         cotizadorPage.seleccionarMonedaUF();
 
@@ -181,6 +187,54 @@ public class CotizadorTransporteAereoTest {
 
         // Capturar pantalla después de agregar segundo embalaje
         basePage.capturaPantallaCompleta("t014_EmbalajeBOLSASAgregado");
+
+        // Obtener datos del viaje del JSON
+        String lineaAerea = basePage.obtenerJson("datos_ejemplo", "ViajeData", "lineaAerea");
+        String ciudadOrigen = basePage.obtenerJson("datos_ejemplo", "ViajeData", "ciudadOrigen");
+        String ciudadDestino = basePage.obtenerJson("datos_ejemplo", "ViajeData", "ciudadDestino");
+        String montoAsegurado = basePage.obtenerJson("datos_ejemplo", "ViajeData", "montoAsegurado");
+        String numeroFactura = basePage.obtenerJson("datos_ejemplo", "ViajeData", "numeroFactura");
+        String numeroReferencia = basePage.obtenerJson("datos_ejemplo", "ViajeData", "numeroReferencia");
+
+        // Seleccionar línea aérea
+        System.out.println("---> Seleccionamos línea aérea: " + lineaAerea);
+        cotizadorPage.seleccionarLineaAerea(lineaAerea);
+
+        // Capturar pantalla después de seleccionar línea aérea
+        basePage.capturaPantallaCompleta("t015_LineaAereaSeleccionada");
+
+        // Llenar datos del viaje
+        System.out.println("---> Seleccionamos ciudad origen: " + ciudadOrigen);
+        cotizadorPage.seleccionarCiudadOrigen(ciudadOrigen);
+
+        System.out.println("---> Seleccionamos ciudad destino: " + ciudadDestino);
+        cotizadorPage.seleccionarCiudadDestino(ciudadDestino);
+
+        System.out.println("---> Ingresamos monto asegurado: " + montoAsegurado);
+        cotizadorPage.ingresarMontoAsegurado(montoAsegurado);
+
+        System.out.println("---> Ingresamos números de factura/guía: " + numeroFactura);
+        cotizadorPage.ingresarNumerosFactura(numeroFactura);
+
+        System.out.println("---> Ingresamos números de referencia: " + numeroReferencia);
+        cotizadorPage.ingresarNumerosReferencia(numeroReferencia);
+
+        System.out.println("---> Marcamos las declaraciones requeridas");
+        cotizadorPage.marcarDeclaraciones();
+
+        // Capturar pantalla antes de hacer clic en Siguiente
+        basePage.capturaPantallaCompleta("t016_ViajeDatosCompletos");
+
+        System.out.println("---> Clic en Siguiente del viaje");
+        cotizadorPage.clickSiguienteViaje();
+
+        // Restaurar zoom a 100% después del botón Siguiente
+        ((JavascriptExecutor) driver).executeScript("document.body.style.zoom = '1.0'");
+        basePage.pausaFijaMs(500);
+        System.out.println("---> Zoom restaurado a 100%");
+
+        // Capturar pantalla después de hacer clic en Siguiente
+        basePage.capturaPantallaCompleta("t017_ViajeSiguiente");
 
         System.out.println("---> Finaliza Test\n");
     }

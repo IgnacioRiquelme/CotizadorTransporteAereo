@@ -42,6 +42,20 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By selectEmbalaje = By.id("DropEmbalaje");
     private By btnAgregarEmbalaje = By.id("btnAgregarEmbalaje");
 
+    // Locator para línea aérea
+    private By dropLineaAerea = By.id("DropTipoViajeEspecifico");
+
+    // Locators para datos del viaje
+    private By dropCiudadOrigen = By.id("DropCiudadOrigen");
+    private By dropCiudadDestino = By.id("DropCiudadDestino");
+    private By txtMontoAsegurado = By.id("MontoAsegurado");
+    private By txtNumerosFacturaGuia = By.id("NumerosFacturaGuia");
+    private By txtNumerosReferencia = By.id("NumerosReferencia");
+    private By chkDeclaracionMedidasSeguridad = By.id("DeclaracionMedidasSeguridad");
+    private By chkDeclaracionOtra = By.xpath("//*[@id='poliza-viaje']/div[3]/div[8]/p[3]/label");
+    private By chkDeclaracionViajeNoIniciado = By.xpath("//*[@id='poliza-viaje']/div[3]/div[8]/p[4]/label");
+    private By btnSiguienteViaje = By.id("modal_next");
+
     // CONSTRUCTOR
     // ============================================
 
@@ -371,5 +385,186 @@ public class CotizadorTransporteAereoPage extends BasePage {
     public boolean isPaginaCargada() {
         // Verificar algún elemento característico, por ahora devolver true
         return driver.getTitle() != null && !driver.getTitle().isEmpty();
+    }
+
+    // ============================================
+    // MÉTODOS DE VIAJE
+    // ============================================
+
+    /**
+     * Selecciona la línea aérea
+     * @param lineaAerea Nombre de la línea aérea
+     */
+    public void seleccionarLineaAerea(String lineaAerea) {
+        try {
+            pausaFijaSeg(2);
+            
+            // Locator para el input de búsqueda del chosen
+            By inputBusquedaLineaAerea = By.xpath("//div[@id='DropTipoViajeEspecifico_chosen']//input[@type='text']");
+            
+            // Hacer clic en el span para abrir el dropdown
+            By spanLineaAerea = By.xpath("//div[@id='DropTipoViajeEspecifico_chosen']//span");
+            pausaPorElementoLocalizado(spanLineaAerea);
+            WebElement span = driver.findElement(spanLineaAerea);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", span);
+            pausaFijaMs(500);
+            span.click();
+            pausaFijaMs(500);
+            
+            // Escribir en el input de búsqueda
+            pausaPorElementoLocalizado(inputBusquedaLineaAerea);
+            WebElement inputBusqueda = driver.findElement(inputBusquedaLineaAerea);
+            inputBusqueda.clear();
+            inputBusqueda.sendKeys(lineaAerea);
+            pausaFijaMs(500);
+            
+            // Presionar ENTER
+            inputBusqueda.sendKeys(Keys.ENTER);
+            pausaFijaMs(500);
+            
+            System.out.println("---> Línea aérea seleccionada: " + lineaAerea);
+        } catch (Exception e) {
+            System.out.println("---> seleccionarLineaAerea: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Selecciona la ciudad de origen
+     * @param ciudadOrigen Nombre de la ciudad de origen
+     */
+    public void seleccionarCiudadOrigen(String ciudadOrigen) {
+        try {
+            pausaPorElementoLocalizado(dropCiudadOrigen);
+            Select select = new Select(driver.findElement(dropCiudadOrigen));
+            select.selectByVisibleText(ciudadOrigen);
+            pausaFijaMs(500);
+            System.out.println("---> Ciudad origen seleccionada: " + ciudadOrigen);
+        } catch (Exception e) {
+            System.out.println("---> seleccionarCiudadOrigen: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Selecciona la ciudad de destino
+     * @param ciudadDestino Nombre de la ciudad de destino
+     */
+    public void seleccionarCiudadDestino(String ciudadDestino) {
+        try {
+            pausaPorElementoLocalizado(dropCiudadDestino);
+            Select select = new Select(driver.findElement(dropCiudadDestino));
+            select.selectByVisibleText(ciudadDestino);
+            pausaFijaMs(500);
+            System.out.println("---> Ciudad destino seleccionada: " + ciudadDestino);
+        } catch (Exception e) {
+            System.out.println("---> seleccionarCiudadDestino: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Ingresa el monto asegurado
+     * @param monto Monto asegurado
+     */
+    public void ingresarMontoAsegurado(String monto) {
+        try {
+            pausaPorElementoLocalizado(txtMontoAsegurado);
+            WebElement elemento = driver.findElement(txtMontoAsegurado);
+            elemento.clear();
+            elemento.sendKeys(monto);
+            pausaFijaMs(500);
+            System.out.println("---> Monto asegurado ingresado: " + monto);
+        } catch (Exception e) {
+            System.out.println("---> ingresarMontoAsegurado: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Ingresa los números de factura/guía
+     * @param numeroFactura Número de factura/guía
+     */
+    public void ingresarNumerosFactura(String numeroFactura) {
+        try {
+            pausaPorElementoLocalizado(txtNumerosFacturaGuia);
+            WebElement elemento = driver.findElement(txtNumerosFacturaGuia);
+            elemento.clear();
+            elemento.sendKeys(numeroFactura);
+            pausaFijaMs(500);
+            System.out.println("---> Números factura/guía ingresados: " + numeroFactura);
+        } catch (Exception e) {
+            System.out.println("---> ingresarNumerosFactura: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Ingresa los números de referencia
+     * @param numeroReferencia Número de referencia
+     */
+    public void ingresarNumerosReferencia(String numeroReferencia) {
+        try {
+            pausaPorElementoLocalizado(txtNumerosReferencia);
+            WebElement elemento = driver.findElement(txtNumerosReferencia);
+            elemento.clear();
+            elemento.sendKeys(numeroReferencia);
+            pausaFijaMs(500);
+            System.out.println("---> Números referencia ingresados: " + numeroReferencia);
+        } catch (Exception e) {
+            System.out.println("---> ingresarNumerosReferencia: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Marca las declaraciones requeridas
+     */
+    public void marcarDeclaraciones() {
+        try {
+            // Marcar declaración de medidas de seguridad usando el checkbox directamente
+            pausaPorElementoLocalizado(chkDeclaracionMedidasSeguridad);
+            WebElement chkMedidas = driver.findElement(chkDeclaracionMedidasSeguridad);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", chkMedidas);
+            pausaFijaMs(300);
+            // Usar JavaScript click para asegurar que funcione
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", chkMedidas);
+            pausaFijaMs(500);
+            System.out.println("---> Declaración medidas de seguridad marcada");
+
+            // Marcar tercera declaración (p[3])
+            pausaPorElementoLocalizado(chkDeclaracionOtra);
+            WebElement chkOtra = driver.findElement(chkDeclaracionOtra);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", chkOtra);
+            pausaFijaMs(300);
+            chkOtra.click();
+            pausaFijaMs(500);
+            System.out.println("---> Tercera declaración marcada");
+
+            // Marcar declaración de viaje no iniciado (p[4])
+            pausaPorElementoLocalizado(chkDeclaracionViajeNoIniciado);
+            WebElement chkNoIniciado = driver.findElement(chkDeclaracionViajeNoIniciado);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", chkNoIniciado);
+            pausaFijaMs(300);
+            chkNoIniciado.click();
+            pausaFijaMs(500);
+            System.out.println("---> Declaración viaje no iniciado marcada");
+
+        } catch (Exception e) {
+            System.out.println("---> marcarDeclaraciones: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Hace clic en el botón Siguiente del viaje
+     */
+    public void clickSiguienteViaje() {
+        try {
+            pausaPorElementoLocalizado(btnSiguienteViaje);
+            WebElement boton = driver.findElement(btnSiguienteViaje);
+            // Hacer scroll al elemento
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", boton);
+            pausaFijaMs(500);
+            // Usar JavaScript click para asegurar que funcione
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", boton);
+            pausaFijaSeg(3);
+            System.out.println("---> Clic en Siguiente viaje");
+        } catch (Exception e) {
+            System.out.println("---> clickSiguienteViaje: error -> " + e.getMessage());
+        }
     }
 }

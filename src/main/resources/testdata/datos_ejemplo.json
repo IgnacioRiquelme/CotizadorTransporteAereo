@@ -7,6 +7,14 @@
   "CotizacionData": {
     "rutContratante": "127818894"
   },
+  "ViajeData": {
+    "lineaAerea": "LATAM Airlines Group S.A. dba LATAM Airlines Group",
+    "ciudadOrigen": "San Javier",
+    "ciudadDestino": "Calama",
+    "montoAsegurado": "5000",
+    "numeroFactura": "865465412",
+    "numeroReferencia": "8654654"
+  },
   "ConfiguracionAdicional": {
     "timeout": "30",
     "navegador": "chrome",
