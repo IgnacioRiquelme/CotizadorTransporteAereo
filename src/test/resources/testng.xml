@@ -5,9 +5,9 @@
         <listener class-name="base.TestListener"/>
     </listeners>
     
-    <test name="Tests de Ejemplo" preserve-order="true">
+    <test name="Tests de Cotizador Transporte Aéreo" preserve-order="true">
         <classes>
-            <class name="tests.EjemploTest"/>
+            <class name="tests.CotizadorTransporteAereoTest"/>
         </classes>
     </test>
 </suite>

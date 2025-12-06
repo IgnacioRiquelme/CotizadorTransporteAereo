@@ -31,6 +31,7 @@ public class CotizadorTransporteAereoPage extends BasePage {
     private By dropSucursal = By.id("DropSucursal");
     private By txtRutContratante = By.id("TbRutcontratante");
     private By btnSiguiente = By.id("lnkSiguiente");
+    private By btnSiguienteSus = By.id("lnkSiguienteSus");
 
     // Locators para la página siguiente
     private By rdbViajeEspecifico = By.xpath("/html/body/div[1]/div[3]/div/div/form/div/div[2]/div[2]/div/p/input");
@@ -565,6 +566,25 @@ public class CotizadorTransporteAereoPage extends BasePage {
             System.out.println("---> Clic en Siguiente viaje");
         } catch (Exception e) {
             System.out.println("---> clickSiguienteViaje: error -> " + e.getMessage());
+        }
+    }
+
+    /**
+     * Hace clic en el botón Siguiente final (id="lnkSiguienteSus")
+     * Espera un breve período para que cargue el acceso final.
+     */
+    public void clickSiguienteSus() {
+        try {
+            pausaPorElementoClickeable(btnSiguienteSus);
+            WebElement boton = driver.findElement(btnSiguienteSus);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", boton);
+            pausaFijaMs(300);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", boton);
+            // Esperar a que el último acceso cargue (captura posterior será tomada por el test)
+            pausaFijaSeg(4);
+            System.out.println("---> Clic en Siguiente (lnkSiguienteSus)");
+        } catch (Exception e) {
+            System.out.println("---> clickSiguienteSus: error -> " + e.getMessage());
         }
     }
 }

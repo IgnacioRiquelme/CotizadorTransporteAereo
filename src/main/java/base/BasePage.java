@@ -564,7 +564,8 @@ public class BasePage {
 
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File destinationFile = new File(GlobalVariables.PATH_CAPTURA + var + "_" + timestamp + ".jpg");
+            // Guardar siempre en formato PNG (requerimiento)
+            File destinationFile = new File(GlobalVariables.PATH_CAPTURA + var + "_" + timestamp + ".png");
             FileHandler.copy(screenshot, destinationFile);
         } catch (NoSuchSessionException | IOException | InterruptedException e) {
             e.printStackTrace();
